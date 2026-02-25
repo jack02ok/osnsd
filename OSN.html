@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seleksi OSN SD Negeri Neglasari 02</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom Scrollbar for Sidebar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9; 
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1; 
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8; 
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen font-sans text-gray-800 selection:bg-blue-200">
+
+  <!-- ================= SCREEN: LOGIN ================= -->
+  <div id="screen-login" class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl p-8 max-w-md w-full border-t-4 border-blue-600">
+      <div class="text-center mb-6">
+        <div class="flex justify-center items-center gap-4 mb-4">
+          <img src="https://raw.githubusercontent.com/jakasaputra210-pixel/SeleksiOSNSD/refs/heads/main/logokab.png" alt="Logo Kabupaten Bogor" class="h-16 w-auto object-contain drop-shadow-sm" onerror="this.style.display='none'">
+          <img src="https://raw.githubusercontent.com/jakasaputra210-pixel/SeleksiOSNSD/refs/heads/main/logosd.png" alt="Logo SD Negeri Neglasari 02" class="h-16 w-auto object-contain drop-shadow-sm" onerror="this.style.display='none'">
+          <img src="https://raw.githubusercontent.com/jakasaputra210-pixel/SeleksiOSNSD/refs/heads/main/Logo_OSN_baru.jpg" alt="Logo OSN" class="h-16 w-auto object-contain drop-shadow-sm rounded-md" onerror="this.style.display='none'">
+        </div>
+        <h1 class="text-2xl font-bold text-gray-800">Seleksi OSN 2025</h1>
+        <p class="text-sm text-gray-500 font-medium">SD Negeri Neglasari 02</p>
+      </div>
+      
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+          <input id="input-nama" required type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Masukkan nama lengkap">
+        </div>
+        <div class="flex gap-4">
+          <div class="w-1/2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
+            <select id="input-kelas" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="4">Kelas 4</option>
+              <option value="5">Kelas 5</option>
+            </select>
+          </div>
+          <div class="w-1/2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
+            <select id="input-jk" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="L">Laki-Laki</option>
+              <option value="P">Perempuan</option>
+            </select>
+          </div>
+        </div>
+        <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 flex items-center justify-between">
+          <span class="text-sm text-gray-600">Token Ujian:</span>
+          <span id="display-token" class="font-mono font-bold text-lg text-blue-700 tracking-widest"></span>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Masukkan Token</label>
+          <input id="input-token" required type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none uppercase font-mono tracking-widest" placeholder="XXXXX">
+          <p id="login-error" class="text-red-500 text-xs mt-1 hidden font-medium">Token yang dimasukkan salah!</p>
+        </div>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition mt-2">
+          Masuk / Login
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= SCREEN: DASHBOARD ================= -->
+  <div id="screen-dashboard" class="hidden min-h-screen bg-slate-50 p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+      <header class="bg-white rounded-xl shadow-sm p-6 mb-6 flex items-center justify-between border-b-4 border-blue-600">
+        <div class="flex items-center gap-4">
+          <div class="bg-blue-100 p-3 rounded-full text-blue-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <h2 id="dash-user-name" class="text-xl font-bold text-gray-800">Nama Siswa</h2>
+            <p id="dash-user-info" class="text-sm text-gray-500">Kelas | JK | SD Negeri Neglasari 02</p>
+          </div>
+        </div>
+        <button onclick="logout()" class="flex items-center gap-2 text-red-500 hover:text-red-700 font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          Keluar
+        </button>
+      </header>
+
+      <h3 class="text-lg font-bold text-gray-700 mb-4">Pilih Mata Pelajaran Seleksi OSN</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- MTK Card -->
+        <div onclick="startQuiz('MTK')" class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition cursor-pointer flex flex-col items-center text-center group">
+          <div class="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition text-blue-600 group-hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <h4 class="font-bold text-xl text-gray-800 mb-2">Matematika</h4>
+          <p class="text-sm text-gray-500 mb-4">30 Soal • 45 Menit</p>
+          <button class="bg-gray-100 text-blue-600 font-semibold py-2 px-6 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition w-full">Mulai Ujian</button>
+        </div>
+        <!-- IPA Card -->
+        <div onclick="startQuiz('IPA')" class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition cursor-pointer flex flex-col items-center text-center group">
+          <div class="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition text-blue-600 group-hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <h4 class="font-bold text-xl text-gray-800 mb-2">IPA</h4>
+          <p class="text-sm text-gray-500 mb-4">30 Soal • 45 Menit</p>
+          <button class="bg-gray-100 text-blue-600 font-semibold py-2 px-6 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition w-full">Mulai Ujian</button>
+        </div>
+        <!-- IPS Card -->
+        <div onclick="startQuiz('IPS')" class="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition cursor-pointer flex flex-col items-center text-center group">
+          <div class="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition text-blue-600 group-hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <h4 class="font-bold text-xl text-gray-800 mb-2">IPS</h4>
+          <p class="text-sm text-gray-500 mb-4">30 Soal • 45 Menit</p>
+          <button class="bg-gray-100 text-blue-600 font-semibold py-2 px-6 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition w-full">Mulai Ujian</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SCREEN: QUIZ ================= -->
+  <div id="screen-quiz" class="hidden min-h-screen bg-slate-50 flex flex-col relative">
+    <!-- Header Ujian -->
+    <header class="bg-blue-700 text-white p-4 shadow-md sticky top-0 z-10">
+      <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div>
+          <h1 id="quiz-title" class="font-bold text-lg">Ujian</h1>
+          <p id="quiz-user-info" class="text-blue-200 text-sm">Nama - Kelas</p>
+        </div>
+        <div id="timer-container" class="flex items-center gap-2 px-4 py-2 rounded-lg font-mono font-bold text-xl bg-blue-800 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="timer-display">45:00</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex-1 max-w-6xl mx-auto w-full p-4 flex flex-col md:flex-row gap-6 mt-4">
+      <!-- Main Area Soal -->
+      <div class="flex-1 bg-white rounded-xl shadow-sm border p-6 flex flex-col">
+        <div class="flex justify-between items-center mb-6 pb-4 border-b">
+          <span id="question-number" class="font-bold text-gray-500">Soal Nomor 1</span>
+        </div>
+        
+        <div id="question-text" class="text-lg text-gray-800 mb-8 leading-relaxed font-medium">
+          <!-- Text Soal -->
+        </div>
+
+        <div id="options-container" class="space-y-3 flex-1">
+          <!-- Pilihan Jawaban -->
+        </div>
+
+        <!-- Navigasi Bawah -->
+        <div class="flex justify-between mt-8 pt-6 border-t">
+          <button id="btn-prev" onclick="changeQuestion(-1)" class="flex items-center gap-2 px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium disabled:opacity-50 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg> Sebelumnya
+          </button>
+          
+          <button id="btn-next" onclick="changeQuestion(1)" class="flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-md transition">
+            Selanjutnya <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+
+          <button id="btn-finish" onclick="openConfirmModal()" class="hidden flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium shadow-md transition">
+            Selesai Ujian <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar Navigasi Nomor -->
+      <div class="w-full md:w-80 bg-white rounded-xl shadow-sm border p-6 h-fit">
+        <h3 class="font-bold text-gray-700 mb-4 flex items-center gap-2">Navigasi Soal</h3>
+        <div id="nav-sidebar" class="grid grid-cols-5 gap-2 max-h-64 md:max-h-none overflow-y-auto custom-scrollbar p-1">
+          <!-- Tombol Nomor Soal -->
+        </div>
+        <div class="mt-6 pt-4 border-t flex flex-col gap-2">
+          <div class="flex items-center gap-2 text-sm text-gray-600"><div class="w-4 h-4 bg-blue-600 rounded"></div> Sudah Dijawab</div>
+          <div class="flex items-center gap-2 text-sm text-gray-600"><div class="w-4 h-4 bg-white border-2 border-gray-200 rounded"></div> Belum Dijawab</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SCREEN: RESULT ================= -->
+  <div id="screen-result" class="hidden min-h-screen bg-slate-100 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl p-8 max-w-md w-full text-center border-t-4 border-green-500 relative overflow-hidden">
+      <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+      </div>
+      <h2 class="text-3xl font-bold text-gray-800 mb-2">Ujian Selesai!</h2>
+      <p class="text-gray-600 mb-6">Terima kasih, <strong id="result-name">Nama</strong>. Anda telah menyelesaikan seleksi OSN <span id="result-mapel">Mapel</span>.</p>
+      
+      <div class="bg-slate-50 border rounded-xl p-6 mb-6">
+        <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Skor Akhir Anda</p>
+        <p id="result-score" class="text-6xl font-black text-green-600">0</p>
+      </div>
+
+      <!-- Sync Status -->
+      <div id="sync-loading" class="flex items-center justify-center gap-2 text-blue-600 mb-6">
+        <div class="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <span class="text-sm font-medium">Menyimpan ke Spreadsheet...</span>
+      </div>
+      
+      <div id="sync-success" class="hidden flex items-center justify-center gap-2 text-green-600 mb-6 bg-green-50 p-2 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+        <span class="text-sm font-medium">Data berhasil disimpan.</span>
+      </div>
+
+      <div id="sync-error" class="hidden flex items-center justify-center gap-2 text-red-600 mb-6 bg-red-50 p-2 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+        <span class="text-sm font-medium text-left leading-tight">Gagal menyimpan (pastikan setup URL Apps Script benar).</span>
+      </div>
+
+      <button onclick="goToDashboard()" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 rounded-lg transition shadow-md">
+        Kembali ke Beranda
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= CUSTOM MODAL (CONFIRMATION) ================= -->
+  <div id="confirm-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+    <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6 text-center transform scale-100 transition-transform">
+      <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 text-yellow-600">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800 mb-2">Selesai Ujian?</h3>
+      <p class="text-gray-600 mb-6 text-sm">Apakah Anda yakin ingin menyelesaikan ujian? Waktu Anda masih tersisa. Jawaban tidak dapat diubah setelah diselesaikan.</p>
+      <div class="flex gap-3">
+        <button onclick="closeConfirmModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition">Batal</button>
+        <button onclick="confirmFinishQuiz()" class="flex-1 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow-md">Ya, Selesai</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // === KONFIGURASI GOOGLE SHEETS ===
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxsltiMHar1jIl4PHB6_o5ObYievYnSf9jFOw3iGhkeNXGF35PCWTVyLwjAbVuFP8rj1w/exec";
+
+    // === BANK SOAL ===
+    const BANK_SOAL = {
+      MTK: [
+        { q: "Berapakah hasil dari 123 x 9 + 4?", o: ["1107", "1111", "1115", "1110"], a: 1 },
+        { q: "Tentukan nilai n yang memenuhi persamaan 2^n + 2^n = 2^6.", o: ["3", "4", "5", "6"], a: 2 },
+        { q: "Bilangan terkecil yang jika dibagi 3 sisa 1, dibagi 4 sisa 2, dan dibagi 5 sisa 3 adalah...", o: ["58", "60", "62", "118"], a: 0 },
+        { q: "Tentukan jumlah semua bilangan prima antara 10 dan 30.", o: ["110", "112", "120", "122"], a: 1 },
+        { q: "FPB dan KPK dari 24, 36, dan 48 berturut-turut adalah...", o: ["6 dan 144", "12 dan 144", "12 dan 72", "24 dan 144"], a: 1 },
+        { q: "Jika a dan b adalah bilangan bulat positif sehingga a x b = 48, berapakah nilai minimum dari a + b?", o: ["14", "16", "19", "49"], a: 0 },
+        { q: "Tentukan angka satuan dari 3^2025.", o: ["1", "3", "7", "9"], a: 1 },
+        { q: "Berapakah banyak bilangan bulat positif yang kurang dari 100 dan merupakan kelipatan 3 tetapi bukan kelipatan 5?", o: ["20", "26", "27", "33"], a: 2 },
+        { q: "Temukan pola bilangan berikut: 1, 4, 9, 16, 25, ... Suku ke-12 adalah...", o: ["100", "121", "144", "169"], a: 2 },
+        { q: "Berapakah nilai dari 1/(1x2) + 1/(2x3) + 1/(3x4) + ... + 1/(9x10)?", o: ["1/10", "8/9", "9/10", "1"], a: 2 },
+        { q: "Sebuah bilangan terdiri dari 3 angka. Jumlah angka-angkanya adalah 12. Angka ratusannya tiga kali angka satuannya. Jika angka puluhan adalah 2, bilangan tersebut adalah...", o: ["321", "622", "923", "723"], a: 2 },
+        { q: "Tentukan nilai x agar bilangan 45x2 habis dibagi 9.", o: ["5", "6", "7", "8"], a: 2 },
+        { q: "Berapakah selisih antara KPK dan FPB dari 15 dan 25?", o: ["10", "50", "70", "75"], a: 2 },
+        { q: "Jika n! = n x (n-1) x ... x 1, tentukan angka terakhir dari 1! + 2! + 3! + 4! + 5!.", o: ["0", "3", "5", "8"], a: 1 },
+        { q: "Berapa banyak faktor positif dari bilangan 120?", o: ["8", "12", "16", "24"], a: 3 },
+        { q: "Tentukan suku berikutnya dari barisan 2, 5, 10, 17, ...", o: ["24", "25", "26", "27"], a: 2 },
+        { q: "Jika x + 15 = 3x - 5, maka nilai x adalah...", o: ["5", "10", "15", "20"], a: 1 },
+        { q: "Harga 3 buku dan 2 pensil adalah Rp15.000. Jika harga 1 buku Rp3.000, berapakah harga 5 pensil?", o: ["Rp10.000", "Rp12.500", "Rp15.000", "Rp20.000"], a: 2 },
+        { q: "Ibu membeli beras seberat 2,5 kg, gula 1,25 kg, dan tepung 0,75 kg. Berapakah total berat belanjaan Ibu?", o: ["4,00 kg", "4,25 kg", "4,50 kg", "5,00 kg"], a: 2 },
+        { q: "Rasio umur Andi dan Budi adalah 3 : 5. Jika jumlah umur mereka 40 tahun, berapakah umur Budi?", o: ["15 tahun", "20 tahun", "25 tahun", "30 tahun"], a: 2 },
+        { q: "Sebuah mobil menempuh jarak 120 km dalam waktu 2 jam. Berapakah kecepatan rata-rata mobil tersebut dalam m/menit?", o: ["60 m/menit", "100 m/menit", "1000 m/menit", "6000 m/menit"], a: 2 },
+        { q: "Dalam sebuah peta, skala tertulis 1 : 500.000. Jika jarak dua kota pada peta 4 cm, jarak sebenarnya adalah...", o: ["2 km", "20 km", "200 km", "2000 km"], a: 1 },
+        { q: "Berapakah nilai dari 0,333... + 0,666...?", o: ["0,999", "0,9", "1", "1,1"], a: 2 },
+        { q: "Seorang pedagang menjual barang seharga Rp200.000 dan mendapat untung 25%. Berapakah harga beli barang tersebut?", o: ["Rp150.000", "Rp160.000", "Rp175.000", "Rp250.000"], a: 1 },
+        { q: "Tentukan hasil dari (24 + 16) ÷ 5 - 3 x 2.", o: ["2", "4", "6", "8"], a: 0 },
+        { q: "Jika 4 orang dapat menyelesaikan pekerjaan dalam 10 hari, berapa hari yang dibutuhkan 8 orang untuk pekerjaan yang sama?", o: ["5 hari", "15 hari", "20 hari", "80 hari"], a: 0 },
+        { q: "Berapakah 15% dari (40% dari 500)?", o: ["30", "45", "60", "75"], a: 0 },
+        { q: "Nilai rata-rata ujian 5 siswa adalah 80. Jika ditambah nilai satu siswa lagi, rata-ratanya menjadi 82. Berapakah nilai siswa tersebut?", o: ["82", "85", "90", "92"], a: 3 },
+        { q: "Bentuk desimal dari pecahan 7/8 adalah...", o: ["0,7", "0,75", "0,875", "0,88"], a: 2 },
+        { q: "Selesaikan: 2,5 x 4 - (1,2 + 0,8) ÷ 0,5.", o: ["4", "6", "8", "10"], a: 1 },
+        { q: "Jika a : b = 2 : 3 dan b : c = 4 : 5, tentukan rasio a : c.", o: ["2 : 5", "8 : 15", "6 : 15", "1 : 2"], a: 1 },
+        { q: "Sebuah tabung diisi air 3/5 bagian. Jika perlu 12 liter lagi untuk penuh, berapakah kapasitas total tabung?", o: ["20 liter", "24 liter", "30 liter", "60 liter"], a: 2 },
+        { q: "Berapakah besar sudut terkecil yang dibentuk jarum jam pada pukul 04.00?", o: ["90°", "120°", "150°", "180°"], a: 1 },
+        { q: "Luas persegi sama dengan luas persegi panjang yang berukuran 16 cm x 4 cm. Keliling persegi tersebut adalah...", o: ["16 cm", "32 cm", "40 cm", "64 cm"], a: 1 },
+        { q: "Tentukan keliling lingkaran yang memiliki luas 154 cm². (Gunakan π = 22/7)", o: ["22 cm", "44 cm", "66 cm", "88 cm"], a: 1 },
+        { q: "Sebuah segitiga memiliki alas 12 cm dan tinggi 8 cm. Jika alasnya diperbesar 2 kali, berapakah luas segitiga yang baru?", o: ["48 cm²", "96 cm²", "192 cm²", "24 cm²"], a: 1 },
+        { q: "Berapa banyak simetri lipat pada bangun trapesium sama kaki?", o: ["0", "1", "2", "4"], a: 1 },
+        { q: "Sebuah kubus memiliki panjang rusuk 5 cm. Berapakah luas permukaannya?", o: ["25 cm²", "100 cm²", "125 cm²", "150 cm²"], a: 3 },
+        { q: "Volume sebuah balok adalah 480 cm³. Jika panjangnya 12 cm dan lebarnya 8 cm, berapakah tingginya?", o: ["4 cm", "5 cm", "6 cm", "10 cm"], a: 1 },
+        { q: "Tentukan besar sudut pelurus dari 75°.", o: ["15°", "105°", "115°", "285°"], a: 1 },
+        { q: "Berapa banyak titik sudut pada limas segi empat?", o: ["4", "5", "6", "8"], a: 1 },
+        { q: "Sebuah taman berbentuk lingkaran dengan diameter 14 m. Di sekeliling taman akan ditanami pohon dengan jarak 2 m. Banyak pohon adalah...", o: ["22 pohon", "44 pohon", "11 pohon", "7 pohon"], a: 0 },
+        { q: "Jika dua buah segitiga sebangun memiliki rasio sisi 1 : 3, berapakah rasio luas mereka?", o: ["1 : 3", "1 : 6", "1 : 9", "1 : 27"], a: 2 },
+        { q: "Berapa besar sudut dalam pada segi lima beraturan?", o: ["72°", "90°", "108°", "120°"], a: 2 },
+        { q: "Tentukan luas daerah yang diarsir pada persegi dengan sisi 10 cm jika di dalamnya terdapat lingkaran terbesar.", o: ["100 - 25π cm²", "100 - 100π cm²", "100 - 50π cm²", "25π cm²"], a: 0 },
+        { q: "Sebuah akuarium balok berukuran 60 cm x 40 cm x 50 cm. Berapa liter air yang dibutuhkan untuk mengisi setengahnya?", o: ["120 liter", "60 liter", "30 liter", "12 liter"], a: 1 },
+        { q: "Jaring-jaring kubus terdiri dari berapa banyak persegi?", o: ["4", "5", "6", "8"], a: 2 },
+        { q: "Sisi miring sebuah segitiga siku-siku adalah 13 cm. Jika salah satu sisi tegaknya 5 cm, berapakah panjang sisi lainnya?", o: ["8 cm", "10 cm", "11 cm", "12 cm"], a: 3 },
+        { q: "Berapa jumlah besar sudut-sudut pada segitiga?", o: ["90°", "180°", "270°", "360°"], a: 1 },
+        { q: "Sebuah tabung memiliki jari-jari 7 cm dan tinggi 10 cm. Berapakah volumenya?", o: ["770 cm³", "1540 cm³", "2200 cm³", "3080 cm³"], a: 1 },
+        { q: "Keliling bangun gabungan persegi (sisi 7 cm) dan setengah lingkaran yang berimpit pada salah satu sisinya adalah...", o: ["25 cm", "32 cm", "36 cm", "39 cm"], a: 1 },
+        { q: "Berapa banyak diagonal bidang pada sebuah balok?", o: ["4", "6", "8", "12"], a: 3 },
+        { q: "Ubahlah 2,5 jam ke dalam satuan detik.", o: ["150 detik", "1500 detik", "9000 detik", "10800 detik"], a: 2 },
+        { q: "Hasil panen (ton): 4, 5, 3, 6, 7. Berapakah rata-ratanya?", o: ["4 ton", "5 ton", "6 ton", "25 ton"], a: 1 },
+        { q: "Tentukan median dari data: 12, 15, 11, 19, 13, 15, 17.", o: ["13", "14", "15", "17"], a: 2 },
+        { q: "Tinggi batang apel 20 unit. 1 unit = 5 kg. Berapa kg total apel?", o: ["25 kg", "80 kg", "100 kg", "120 kg"], a: 2 },
+        { q: "Berapa kg hasil dari 2,5 ton + 3 kuintal + 50 kg?", o: ["550 kg", "2800 kg", "2850 kg", "3050 kg"], a: 2 },
+        { q: "Jarak 1,5 km. Sudah berjalan 850 m. Sisa jaraknya...", o: ["650 m", "750 m", "800 m", "1350 m"], a: 0 },
+        { q: "Modus dari data: 7, 8, 6, 7, 9, 10, 7, 8, 6 adalah...", o: ["6", "7", "8", "9"], a: 1 },
+        { q: "Jika 1 lusin baju harganya Rp600.000, berapakah harga 5 baju?", o: ["Rp200.000", "Rp250.000", "Rp300.000", "Rp350.000"], a: 1 },
+        { q: "Burung terbang 15 m/s. Jarak yang ditempuh dalam 1 jam adalah...", o: ["15 km", "45 km", "54 km", "60 km"], a: 2 },
+        { q: "Debit 2 liter/menit. Waktu mengisi bak 60 liter adalah...", o: ["20 menit", "30 menit", "60 menit", "120 menit"], a: 1 },
+        { q: "Hasil dari 2 windu + 3 dasawarsa - 5 tahun adalah...", o: ["41 tahun", "45 tahun", "51 tahun", "56 tahun"], a: 0 },
+        { q: "Sektor bola 90° dari total 40 siswa. Banyak siswa hobi bola adalah...", o: ["5 orang", "10 orang", "15 orang", "20 orang"], a: 1 },
+        { q: "Rata-rata x, 10, 15, 20 adalah 15. Nilai x adalah...", o: ["10", "15", "20", "25"], a: 1 },
+        { q: "Botol 750 ml dituang ke gelas 150 ml. Berapa gelas yang terisi?", o: ["3 gelas", "4 gelas", "5 gelas", "6 gelas"], a: 2 },
+        { q: "3 kodi + 2 gros = ... buah.", o: ["180 buah", "300 buah", "348 buah", "400 buah"], a: 2 },
+        { q: "Konversi 25°C ke Fahrenheit adalah...", o: ["45°F", "72°F", "77°F", "80°F"], a: 2 },
+        { q: "Kota A ke B ada 3 jalan, B ke C ada 4 jalan. Rute A-C melalui B adalah...", o: ["7 rute", "10 rute", "12 rute", "14 rute"], a: 2 },
+        { q: "Banyak cara menyusun huruf kata \"BPTI\" adalah...", o: ["4 cara", "12 cara", "24 cara", "48 cara"], a: 2 },
+        { q: "Kotak berisi 3 bola merah dan 2 biru. Peluang terambil merah adalah...", o: ["1/5", "2/5", "3/5", "1/2"], a: 2 },
+        { q: "Banyak bilangan dua angka dari 1, 2, 3 tanpa pengulangan adalah...", o: ["3", "6", "9", "12"], a: 1 },
+        { q: "5 orang bersalaman satu sama lain tepat satu kali. Banyak salaman...", o: ["5", "10", "15", "20"], a: 1 },
+        { q: "Banyak cara memilih 2 siswa dari 4 untuk ketua dan wakil adalah...", o: ["6", "8", "12", "16"], a: 2 },
+        { q: "Banyak angka \"5\" yang muncul dari bilangan 1 sampai 100 adalah...", o: ["10", "11", "19", "20"], a: 3 },
+        { q: "Peluang muncul angka genap pada lemparan satu dadu adalah...", o: ["1/6", "1/3", "1/2", "2/3"], a: 2 },
+        { q: "Banyak segitiga yang dapat dibuat dari 5 titik (tidak segaris) adalah...", o: ["5", "10", "15", "20"], a: 1 },
+        { q: "3 hadiah dibagikan ke 5 orang peserta. Banyak kemungkinan pemenang...", o: ["15", "30", "60", "125"], a: 2 },
+        { q: "Banyak cara menyusun 3 buku berbeda di rak adalah...", o: ["3", "6", "9", "12"], a: 1 },
+        { q: "Koin dilempar 3 kali. Banyak ruang sampelnya adalah...", o: ["3", "6", "8", "9"], a: 2 }
+      ],
+      IPA: [
+        { q: "Langkah pertama dalam metode ilmiah setelah melakukan observasi adalah...", o: ["Menarik kesimpulan", "Merumuskan hipotesis", "Merumuskan masalah", "Melakukan eksperimen"], a: 2 },
+        { q: "Dalam sebuah eksperimen, variabel yang sengaja diubah-ubah oleh peneliti disebut variabel...", o: ["Terikat", "Bebas", "Kontrol", "Pengganggu"], a: 1 },
+        { q: "Data yang diperoleh dari hasil pengukuran dengan angka disebut data...", o: ["Kualitatif", "Subjektif", "Kuantitatif", "Naratif"], a: 2 },
+        { q: "Satuan Internasional (SI) untuk massa adalah...", o: ["Gram", "Kilogram", "Newton", "Pound"], a: 1 },
+        { q: "Makhluk hidup yang termasuk dalam Kingdom Fungi memiliki ciri utama yaitu...", o: ["Mampu berfotosintesis", "Memiliki klorofil", "Bersifat saprofit atau parasit", "Memiliki alat gerak aktif"], a: 2 },
+        { q: "Nama ilmiah padi adalah Oryza sativa. Kata Oryza menunjukkan tingkatan takson...", o: ["Spesies", "Famili", "Ordo", "Genus"], a: 3 },
+        { q: "Hewan yang memiliki tulang belakang disebut...", o: ["Invertebrata", "Vertebrata", "Mamalia", "Moluska"], a: 1 },
+        { q: "Perbedaan utama antara sel hewan dan sel tumbuhan adalah tumbuhan memiliki...", o: ["Inti sel", "Dinding sel dan kloroplas", "Membran sel", "Mitokondria"], a: 1 },
+        { q: "Kelompok hewan yang bernapas dengan kulit saat fase larva dan paru-paru saat dewasa adalah...", o: ["Reptilia", "Amphibia", "Pisces", "Aves"], a: 1 },
+        { q: "Penulisan nama ilmiah yang benar menurut aturan Binomial Nomenclature adalah...", o: ["felis catus", "Felis Catus", "Felis catus", "FELIS catus"], a: 2 },
+        { q: "Jamur tidak dikelompokkan ke dalam tumbuhan karena jamur tidak memiliki...", o: ["Akar", "Batang", "Daun", "Klorofil"], a: 3 },
+        { q: "Ciri khas mamalia yang tidak dimiliki oleh kelompok vertebrata lain adalah...", o: ["Memiliki kelenjar susu", "Bernapas dengan paru-paru", "Jantung beruang empat", "Berdarah panas"], a: 0 },
+        { q: "Pertukaran gas oksigen dan karbon dioksida pada manusia terjadi di...", o: ["Bronkus", "Alveolus", "Trakea", "Faring"], a: 1 },
+        { q: "Bagian darah yang berfungsi dalam proses pembekuan darah adalah...", o: ["Eritrosit", "Leukosit", "Trombosit", "Plasma darah"], a: 2 },
+        { q: "Hasil akhir pencernaan protein yang diserap oleh usus halus adalah...", o: ["Glukosa", "Asam lemak", "Gliserol", "Asam amino"], a: 3 },
+        { q: "Enzim amilase yang terdapat di mulut berfungsi untuk mengubah...", o: ["Lemak menjadi asam lemak", "Protein menjadi pepton", "Amilum menjadi glukosa", "Kasein menjadi susu"], a: 2 },
+        { q: "Alat ekskresi pada manusia yang berfungsi menyaring darah dan membentuk urin adalah...", o: ["Hati", "Paru-paru", "Kulit", "Ginjal"], a: 3 },
+        { q: "Bagian mata yang berfungsi mengatur jumlah cahaya yang masuk adalah...", o: ["Retina", "Kornea", "Pupil", "Lensa"], a: 2 },
+        { q: "Tulang yang berfungsi melindungi organ jantung dan paru-paru adalah...", o: ["Tulang tengkorak", "Tulang rusuk", "Tulang belakang", "Tulang panggul"], a: 1 },
+        { q: "Hubungan antar tulang yang memungkinkan gerakan ke segala arah disebut sendi...", o: ["Pelana", "Putar", "Peluru", "Engsel"], a: 2 },
+        { q: "Bagian tumbuhan yang berfungsi untuk mengangkut air dan mineral dari akar ke daun adalah...", o: ["Xilem", "Floem", "Korteks", "Epidermis"], a: 0 },
+        { q: "Fotosintesis pada tumbuhan terjadi paling efektif pada bagian...", o: ["Batang", "Akar", "Daun (jaringan palisade)", "Bunga"], a: 2 },
+        { q: "Hasil utama dari proses fotosintesis adalah...", o: ["Oksigen dan energi", "Glukosa dan oksigen", "Karbon dioksida dan air", "Cahaya dan klorofil"], a: 1 },
+        { q: "Proses penguapan air pada tumbuhan melalui stomata disebut...", o: ["Respirasi", "Transportasi", "Transpirasi", "Gutasi"], a: 2 },
+        { q: "Gerak tumbuhan menuju arah datangnya cahaya matahari disebut...", o: ["Geotropisme", "Hidrotropisme", "Fototropisme", "Tigmotropisme"], a: 2 },
+        { q: "Perkembangbiakan tumbuhan secara generatif melibatkan pertemuan...", o: ["Akar dan batang", "Serbuk sari dan kepala putik", "Spora dan sporangium", "Tunas dan daun"], a: 1 },
+        { q: "Contoh hewan yang mengalami metamorfosis sempurna adalah...", o: ["Kecoa", "Belalang", "Kupu-kupu", "Capung"], a: 2 },
+        { q: "Hormon yang memicu perkembangan ciri kelamin sekunder pada laki-laki saat pubertas adalah...", o: ["Estrogen", "Progesteron", "Testosteron", "Insulin"], a: 2 },
+        { q: "Penyakit yang disebabkan oleh kurangnya vitamin C adalah...", o: ["Rabun ayam", "Sariawan (skorbut)", "Rakitis", "Beri-beri"], a: 1 },
+        { q: "Bagian otak yang berfungsi sebagai pusat keseimbangan tubuh adalah...", o: ["Otak besar", "Otak kecil (cerebellum)", "Sumsum lanjutan", "Otak tengah"], a: 1 },
+        { q: "Pembuluh darah yang membawa darah kaya oksigen keluar dari jantung ke seluruh tubuh adalah...", o: ["Vena", "Kapiler", "Arteri (Aorta)", "Vena pulmonalis"], a: 2 },
+        { q: "Alat pernapasan pada ikan yang berfungsi mengambil oksigen terlarut dalam air adalah...", o: ["Paru-paru", "Trakea", "Insang", "Labirin"], a: 2 },
+        { q: "Sekumpulan makhluk hidup sejenis yang menempati daerah tertentu disebut...", o: ["Individu", "Populasi", "Komunitas", "Ekosistem"], a: 1 },
+        { q: "Hubungan antara kerbau dan burung jalak merupakan contoh simbiosis...", o: ["Mutualisme", "Parasitisme", "Komensalisme", "Amensalisme"], a: 0 },
+        { q: "Dalam rantai makanan, tumbuhan hijau berperan sebagai...", o: ["Konsumen I", "Konsumen II", "Pengurai", "Produsen"], a: 3 },
+        { q: "Organisme yang berfungsi menguraikan zat organik menjadi zat anorganik adalah...", o: ["Tumbuhan", "Karnivora", "Bakteri dan jamur", "Herbivora"], a: 2 },
+        { q: "Dampak negatif dari penebangan hutan secara liar adalah...", o: ["Meningkatnya kadar oksigen", "Terjadinya banjir dan erosi", "Tanah menjadi lebih subur", "Populasi hewan meningkat"], a: 1 },
+        { q: "Fenomena meningkatnya suhu rata-rata atmosfer bumi akibat efek rumah kaca disebut...", o: ["Pemanasan global", "Perubahan musim", "El Nino", "Penipisan ozon"], a: 0 },
+        { q: "Cara beradaptasi pohon jati pada saat musim kemarau adalah...", o: ["Menggulung daunnya", "Menggugurkan daunnya (meranggas)", "Memperlebar daunnya", "Menutup stomata"], a: 1 },
+        { q: "Bentuk adaptasi paruh burung elang yang tajam dan melengkung berfungsi untuk...", o: ["Mengisap madu", "Memakan biji-bijian", "Mencabik daging mangsa", "Menyaring makanan di air"], a: 2 },
+        { q: "Pencemaran air oleh limbah pupuk kimia yang berlebihan dapat menyebabkan ledakan populasi alga yang disebut...", o: ["Polusi udara", "Eutrofikasi", "Abrasi", "Efek tyndall"], a: 1 },
+        { q: "Penggunaan mikroorganisme untuk membantu membersihkan lingkungan dari polutan disebut...", o: ["Bioremediasi", "Fermentasi", "Kloning", "Rekayasa genetika"], a: 0 },
+        { q: "Perubahan wujud benda dari gas menjadi cair disebut...", o: ["Menguap", "Mengembun", "Menyublim", "Mencair"], a: 1 },
+        { q: "Ban mobil dibuat beralur bertujuan untuk...", o: ["Memperkecil gaya gesek", "Memperbesar gaya gesek", "Memperindah tampilan", "Mengurangi tekanan"], a: 1 },
+        { q: "Satuan gaya dalam sistem internasional adalah...", o: ["Joule", "Watt", "Newton", "Pascal"], a: 2 },
+        { q: "Benda yang jatuh bebas ke bumi dipengaruhi oleh gaya...", o: ["Magnet", "Listrik", "Gravitasi", "Pegas"], a: 2 },
+        { q: "Usaha (W) didefinisikan sebagai hasil kali antara gaya (F) dengan...", o: ["Waktu", "Perpindahan", "Kecepatan", "Massa"], a: 1 },
+        { q: "Energi yang dimiliki benda karena kedudukannya (ketinggiannya) disebut energi...", o: ["Kinetik", "Listrik", "Potensial", "Kimia"], a: 2 },
+        { q: "Pada saat senter dinyalakan, terjadi perubahan energi dari...", o: ["Kimia -> Listrik -> Cahaya", "Listrik -> Kimia -> Cahaya", "Cahaya -> Listrik -> Panas", "Panas -> Cahaya -> Listrik"], a: 0 },
+        { q: "Alat yang bekerja berdasarkan prinsip tuas jenis pertama adalah...", o: ["Gerobak roda satu", "Pinset", "Gunting", "Sapu"], a: 2 },
+        { q: "Penggaris plastik yang digosokkan ke rambut dapat menarik serpihan kertas karena adanya...", o: ["Listrik dinamis", "Listrik statis", "Gaya magnet", "Arus searah"], a: 1 },
+        { q: "Bahan yang sangat mudah menghantarkan arus listrik disebut...", o: ["Isolator", "Semikonduktor", "Konduktor", "Adaptor"], a: 2 },
+        { q: "Magnet dapat menarik benda-benda yang terbuat dari...", o: ["Aluminium", "Kayu", "Besi dan nikel", "Plastik"], a: 2 },
+        { q: "Kecepatan benda adalah...", o: ["Jarak dibagi waktu", "Perpindahan dibagi waktu", "Massa dikali percepatan", "Gaya dibagi luas"], a: 1 },
+        { q: "Air yang mendidih merupakan contoh perpindahan kalor secara...", o: ["Konduksi", "Radiasi", "Konveksi", "Isolasi"], a: 2 },
+        { q: "Sifat bayangan pada cermin datar adalah...", o: ["Nyata, tegak, sama besar", "Maya, tegak, sama besar", "Maya, terbalik, lebih kecil", "Nyata, terbalik, sama besar"], a: 1 },
+        { q: "Pelangi terbentuk karena adanya proses...", o: ["Pemantulan cahaya", "Pembiasan dan penguraian cahaya", "Perambatan lurus cahaya", "Penyerapan cahaya"], a: 1 },
+        { q: "Alat optik yang digunakan pada kapal selam untuk melihat permukaan laut adalah...", o: ["Mikroskop", "Lup", "Periskop", "Teleskop"], a: 2 },
+        { q: "Bunyi tidak dapat merambat melalui...", o: ["Udara", "Air", "Besi", "Ruang hampa udara"], a: 3 },
+        { q: "Kuat lemahnya bunyi dipengaruhi oleh...", o: ["Frekuensi", "Amplitudo", "Resonansi", "Periode"], a: 1 },
+        { q: "Kapal laut dapat mengapung di air karena adanya gaya...", o: ["Gesek", "Magnet", "Angkat (Archimedes)", "Gravitasi"], a: 2 },
+        { q: "Termometer bekerja berdasarkan prinsip...", o: ["Pemuaian zat cair", "Perubahan massa benda", "Tekanan udara", "Penguapan gas"], a: 0 },
+        { q: "Pusat tata surya kita adalah...", o: ["Bumi", "Bulan", "Matahari", "Jupiter"], a: 2 },
+        { q: "Planet yang dijuluki sebagai planet merah adalah...", o: ["Venus", "Mars", "Saturnus", "Merkurius"], a: 1 },
+        { q: "Perputaran bumi pada porosnya disebut...", o: ["Revolusi", "Rotasi", "Orbit", "Evolusi"], a: 1 },
+        { q: "Akibat dari terjadinya revolusi bumi adalah...", o: ["Terjadinya siang dan malam", "Gerak semu harian matahari", "Perbedaan waktu di bumi", "Perubahan musim"], a: 3 },
+        { q: "Kumpulan bintang yang membentuk pola tertentu di langit disebut...", o: ["Galaksi", "Komet", "Rasi bintang", "Nebula"], a: 2 },
+        { q: "Gerhana matahari terjadi ketika posisi...", o: ["Bumi berada di antara matahari dan bulan", "Bulan berada di antara matahari dan bumi", "Matahari berada di antara bumi dan bulan", "Bumi, matahari, dan bulan membentuk siku-siku"], a: 1 },
+        { q: "Lapisan atmosfer yang paling dekat dengan permukaan bumi adalah...", o: ["Stratosfer", "Mesosfer", "Troposfer", "Eksosfer"], a: 2 },
+        { q: "Planet yang memiliki cincin paling indah dan jelas adalah...", o: ["Uranus", "Neptunus", "Saturnus", "Jupiter"], a: 2 },
+        { q: "Batuan yang jatuh dari ruang angkasa dan terbakar di atmosfer bumi disebut...", o: ["Meteoroid", "Meteor", "Meteorit", "Asteroid"], a: 1 },
+        { q: "Waktu yang diperlukan bumi untuk sekali mengelilingi matahari adalah...", o: ["24 jam", "30 hari", "354 hari", "365,25 hari"], a: 3 },
+        { q: "Satelit alami bumi adalah...", o: ["Palapa", "Bulan", "Phobos", "Titan"], a: 1 },
+        { q: "Lapisan udara yang melindungi bumi dari radiasi sinar ultraviolet adalah lapisan...", o: ["Nitrogen", "Oksigen", "Ozon", "Argon"], a: 2 },
+        { q: "Peristiwa pasang surut air laut dipengaruhi oleh gaya gravitasi...", o: ["Matahari saja", "Planet-planet", "Bulan dan Matahari", "Inti bumi"], a: 2 },
+        { q: "Bagian terkecil dari suatu benda yang masih memiliki sifat benda tersebut disebut...", o: ["Jaringan", "Sel", "Atom/Molekul", "Unsur"], a: 2 },
+        { q: "Partikel penyusun atom yang bermuatan negatif adalah...", o: ["Proton", "Neutron", "Elektron", "Nukleon"], a: 2 },
+        { q: "Sumber energi alternatif yang berasal dari panas di dalam bumi disebut...", o: ["Biomassa", "Geotermal", "Hidroelektrik", "Nuklir"], a: 1 },
+        { q: "Alat untuk mengukur tekanan udara adalah...", o: ["Higrometer", "Barometer", "Anemometer", "Termometer"], a: 1 },
+        { q: "Batuan yang terbentuk dari pendinginan magma atau lava disebut batuan...", o: ["Sedimen", "Metamorf", "Beku", "Malihan"], a: 2 }
+      ],
+      IPS: [
+        { q: "Dalam melakukan penelitian sosial, langkah pertama yang harus dilakukan adalah...", o: ["Mengumpulkan data", "Menarik kesimpulan", "Menentukan topik atau masalah", "Mengolah data"], a: 2 },
+        { q: "Peta yang menggambarkan relief permukaan bumi dengan garis kontur disebut peta...", o: ["Kadaster", "Korografi", "Tematik", "Topografi"], a: 3 },
+        { q: "Perbandingan jarak pada peta dengan jarak sebenarnya di lapangan disebut...", o: ["Proyeksi", "Skala", "Legenda", "Orientasi"], a: 1 },
+        { q: "Secara astronomis, Indonesia terletak di antara...", o: ["6° LU - 11° LS dan 95° BT - 141° BT", "11° LU - 6° LS dan 95° BT - 141° BT", "6° LU - 11° LS dan 141° BT - 95° BT", "0° LU - 11° LS dan 90° BT - 140° BT"], a: 0 },
+        { q: "Garis khayal yang memisahkan tipe fauna Asiatis dengan fauna Peralihan di Indonesia adalah garis...", o: ["Weber", "Khatulistiwa", "Wallace", "Bujur"], a: 2 },
+        { q: "Contoh hewan tipe Australis yang ditemukan di Papua adalah...", o: ["Harimau", "Komodo", "Cendrawasih", "Gajah"], a: 2 },
+        { q: "Fenomena alam berupa getaran kulit bumi yang disebabkan oleh aktivitas magma disebut...", o: ["Gempa tektonik", "Gempa vulkanik", "Gempa runtuhan", "Tsunami"], a: 1 },
+        { q: "Simbol warna hijau pada peta umum biasanya digunakan untuk menunjukkan ketampakan alam berupa...", o: ["Pegunungan", "Dataran rendah", "Perairan", "Gurun"], a: 1 },
+        { q: "Letak Indonesia di antara dua benua (Asia dan Australia) dan dua samudra (Hindia dan Pasifik) disebut letak...", o: ["Geologis", "Astronomis", "Geografis", "Geomorfologis"], a: 2 },
+        { q: "Salah satu dampak positif dari letak geologis Indonesia yang berada di pertemuan tiga lempeng tektonik adalah...", o: ["Sering terjadi gempa", "Memiliki banyak gunung api sehingga tanah subur", "Memiliki iklim tropis", "Memiliki banyak cadangan emas"], a: 1 },
+        { q: "Sumber daya alam yang tidak dapat diperbaharui (non-renewable) adalah...", o: ["Air", "Hutan", "Batubara", "Sinar matahari"], a: 2 },
+        { q: "Angin muson barat yang bertiup dari Benua Asia ke Benua Australia menyebabkan Indonesia mengalami musim...", o: ["Kemarau", "Pancaroba", "Hujan", "Dingin"], a: 2 },
+        { q: "Alat untuk mengukur tekanan udara adalah...", o: ["Anemometer", "Barometer", "Higrometer", "Termometer"], a: 1 },
+        { q: "Kenampakan buatan yang berfungsi untuk menampung air hujan dan irigasi adalah...", o: ["Danau", "Waduk", "Sungai", "Selokan"], a: 1 },
+        { q: "Hubungan antara kondisi alam suatu daerah dengan profesi masyarakatnya adalah...", o: ["Penduduk pantai umumnya bekerja sebagai petani", "Penduduk pegunungan umumnya bekerja sebagai nelayan", "Penduduk dataran rendah umumnya bekerja sebagai petani atau buruh industri", "Penduduk perkotaan umumnya bekerja sebagai pekebun"], a: 2 },
+        { q: "Aturan atau kaidah yang mengatur tingkah laku manusia dalam masyarakat disebut...", o: ["Nilai", "Norma", "Moral", "Hukum"], a: 1 },
+        { q: "Semboyan \"Bhinneka Tunggal Ika\" memiliki arti...", o: ["Berbeda-beda tetapi tetap satu jua", "Bersatu kita teguh bercerai kita runtuh", "Perbedaan adalah kekuatan", "Persatuan dalam keberagaman"], a: 0 },
+        { q: "Proses interaksi sosial yang mengarah pada persatuan disebut proses...", o: ["Disosiatif", "Asosiatif", "Akulturasi", "Asimilasi"], a: 1 },
+        { q: "Berikut yang termasuk lembaga sosial terkecil dalam masyarakat adalah...", o: ["Sekolah", "Agama", "Keluarga", "Negara"], a: 2 },
+        { q: "Perubahan kehidupan masyarakat dari tradisional menuju modern disebut...", o: ["Globalisasi", "Sosialisasi", "Modernisasi", "Urbanisasi"], a: 2 },
+        { q: "Dampak negatif dari globalisasi dalam bidang budaya adalah...", o: ["Munculnya sikap individualisme", "Mudahnya akses informasi", "Berkembangnya ilmu pengetahuan", "Meningkatnya turis asing"], a: 0 },
+        { q: "Sikap yang harus kita miliki dalam menghadapi keragaman suku bangsa di Indonesia adalah...", o: ["Primordialisme", "Chauvinisme", "Toleransi", "Etnosentrisme"], a: 2 },
+        { q: "Perpindahan penduduk dari desa ke kota disebut...", o: ["Transmigrasi", "Urbanisasi", "Imigrasi", "Emigrasi"], a: 1 },
+        { q: "Salah satu fungsi lembaga pendidikan adalah...", o: ["Memenuhi kebutuhan hidup", "Memberikan perlindungan", "Mewariskan nilai dan norma serta keterampilan", "Mengatur hubungan kekuasaan"], a: 2 },
+        { q: "Contoh interaksi sosial antara individu dengan kelompok adalah...", o: ["Andi berbicara dengan Budi", "Seorang guru mengajar di depan kelas", "Pertandingan sepak bola antar sekolah", "Dua orang bersalaman"], a: 1 },
+        { q: "Masuknya unsur budaya asing yang kemudian menyatu dengan budaya lokal tanpa menghilangkan ciri khas budaya asli disebut...", o: ["Asimilasi", "Akulturasi", "Difusi", "Sosialisasi"], a: 1 },
+        { q: "Konflik atau pertentangan dalam masyarakat termasuk dalam bentuk interaksi...", o: ["Asosiatif", "Disosiatif", "Komunikatif", "Normatif"], a: 1 },
+        { q: "Nilai sosial yang bersumber dari kehendak Tuhan disebut nilai...", o: ["Kebenaran", "Keindahan", "Kerohanian", "Material"], a: 2 },
+        { q: "Globalisasi ditandai dengan kemajuan teknologi yang sangat pesat, terutama di bidang...", o: ["Pertanian", "Komunikasi dan Informasi", "Kehutanan", "Perikanan"], a: 1 },
+        { q: "Faktor pendorong perubahan sosial yang berasal dari luar masyarakat adalah...", o: ["Penemuan baru", "Peperangan atau bencana alam", "Perubahan jumlah penduduk", "Konflik internal"], a: 1 },
+        { q: "Masalah ekonomi muncul karena adanya kesenjangan antara kebutuhan manusia yang tidak terbatas dengan...", o: ["Sumber daya yang melimpah", "Alat pemuas kebutuhan yang terbatas", "Modal yang besar", "Tenaga kerja yang banyak"], a: 1 },
+        { q: "Kegiatan menghasilkan atau menambah nilai guna suatu barang disebut...", o: ["Konsumsi", "Distribusi", "Produksi", "Transportasi"], a: 2 },
+        { q: "Orang atau lembaga yang melakukan kegiatan ekonomi disebut...", o: ["Distributor", "Konsumen", "Pelaku Ekonomi", "Produsen"], a: 2 },
+        { q: "Tujuan utama dari kegiatan konsumsi adalah...", o: ["Mendapatkan keuntungan", "Menghasilkan barang baru", "Memenuhi kebutuhan hidup", "Menyalurkan barang ke pasar"], a: 2 },
+        { q: "ASEAN didirikan pada tanggal 8 Agustus 1967 berdasarkan...", o: ["Deklarasi Bangkok", "Deklarasi Juanda", "Perjanjian Linggarjati", "Konferensi Asia Afrika"], a: 0 },
+        { q: "Kantor sekretariat tetap ASEAN berkedudukan di...", o: ["Manila", "Bangkok", "Jakarta", "Kuala Lumpur"], a: 2 },
+        { q: "Peran Indonesia dalam kerja sama ekonomi ASEAN antara lain adalah...", o: ["Menjadi pemimpin tunggal ASEAN", "Sebagai tempat penyelenggaraan KTT I ASEAN", "Menutup diri dari impor barang ASEAN", "Memberikan bantuan militer ke negara konflik"], a: 1 },
+        { q: "Mata uang negara Thailand adalah...", o: ["Ringgit", "Peso", "Baht", "Dong"], a: 2 },
+        { q: "Kegiatan menjual barang ke luar negeri disebut...", o: ["Impor", "Ekspor", "Barter", "Perdagangan bebas"], a: 1 },
+        { q: "Berikut yang merupakan negara anggota ASEAN yang tidak memiliki wilayah laut adalah...", o: ["Vietnam", "Laos", "Kamboja", "Myanmar"], a: 1 },
+        { q: "Indonesia dikenal sebagai negara agraris karena...", o: ["Memiliki banyak pulau", "Sebagian besar penduduknya bekerja di sektor pertanian", "Memiliki wilayah laut yang sangat luas", "Banyak terdapat gunung berapi"], a: 1 },
+        { q: "Ekonomi maritim berkaitan dengan kegiatan yang dilakukan di...", o: ["Sawah dan ladang", "Kawasan industri", "Wilayah laut dan sekitarnya", "Pegunungan"], a: 2 },
+        { q: "MEA (Masyarakat Ekonomi ASEAN) bertujuan untuk...", o: ["Menciptakan pasar tunggal di kawasan Asia Tenggara", "Membentuk pakta pertahanan militer", "Menghapus semua pajak dalam negeri", "Menyatukan bahasa nasional anggota ASEAN"], a: 0 },
+        { q: "Contoh kerja sama ASEAN di bidang sosial budaya adalah...", o: ["Penyelenggaraan SEA Games", "Pembentukan zona perdagangan bebas (AFTA)", "Pemberantasan peredaran narkoba", "Pengiriman duta dan konsul"], a: 0 },
+        { q: "Alat tukar yang sah dan digunakan dalam transaksi ekonomi disebut...", o: ["Cek", "Giro", "Uang", "Kartu Kredit"], a: 2 },
+        { q: "Berikut yang termasuk barang komoditas ekspor non-migas Indonesia adalah...", o: ["Minyak bumi", "Gas alam", "Kelapa sawit dan karet", "Avtur"], a: 2 },
+        { q: "Perusahaan yang dimiliki oleh dua orang atau lebih dengan nama bersama disebut...", o: ["PT", "Firma", "Koperasi", "BUMN"], a: 1 },
+        { q: "Prinsip utama dari koperasi adalah...", o: ["Mencari keuntungan sebesar-besarnya", "Persaingan bebas", "Kekeluargaan dan gotong royong", "Monopoli pasar"], a: 2 },
+        { q: "Indonesia mengimpor beras dari negara tetangga seperti...", o: ["Singapura", "Brunei Darussalam", "Vietnam dan Thailand", "Malaysia"], a: 2 },
+        { q: "Negara anggota ASEAN yang paling maju ekonominya adalah...", o: ["Indonesia", "Singapura", "Malaysia", "Filipina"], a: 1 },
+        { q: "Kerajaan bercorak Hindu tertua di Indonesia adalah...", o: ["Tarumanegara", "Kutai", "Majapahit", "Sriwijaya"], a: 1 },
+        { q: "Raja terkenal dari Kerajaan Tarumanegara yang membangun saluran air Gomati adalah...", o: ["Mulawarman", "Purnawarman", "Balaputradewa", "Hayam Wuruk"], a: 1 },
+        { q: "Kerajaan Sriwijaya mencapai puncak kejayaan pada masa pemerintahan...", o: ["Ken Arok", "Raden Patah", "Balaputradewa", "Sultan Ageng Tirtayasa"], a: 2 },
+        { q: "Candi Borobudur merupakan peninggalan Kerajaan Mataram Kuno yang bercorak...", o: ["Hindu", "Buddha", "Islam", "Kristen"], a: 1 },
+        { q: "Patih terkenal dari Kerajaan Majapahit yang mengucapkan Sumpah Palapa adalah...", o: ["Gajah Mada", "Kebo Iwa", "Adityawarman", "Raden Wijaya"], a: 0 },
+        { q: "Kerajaan Islam pertama di Indonesia adalah...", o: ["Demak", "Samudera Pasai", "Ternate", "Gowa-Tallo"], a: 1 },
+        { q: "Wali Songo yang berdakwah menggunakan media wayang kulit adalah...", o: ["Sunan Ampel", "Sunan Giri", "Sunan Kalijaga", "Sunan Gunung Jati"], a: 2 },
+        { q: "Tokoh Belanda yang memimpin ekspedisi pertama ke Indonesia dan mendarat di Banten tahun 1596 adalah...", o: ["Cornelis de Houtman", "Vasco da Gama", "Alfonso de Albuquerque", "Pieter Both"], a: 0 },
+        { q: "VOC (Vereenigde Oostindische Compagnie) didirikan oleh Belanda dengan tujuan...", o: ["Membantu rakyat Indonesia", "Menghindari persaingan antar pedagang Belanda", "Memperkenalkan tanaman baru", "Menyebarkan agama"], a: 1 },
+        { q: "Kerja paksa yang diterapkan pada masa pemerintahan Gubernur Jenderal Daendels disebut...", o: ["Kerja rodi", "Romusha", "Tanam paksa", "Landrent"], a: 0 },
+        { q: "Sistem Tanam Paksa (Cultuurstelsel) diusulkan oleh...", o: ["Raffles", "Van den Bosch", "Snouck Hurgronje", "Douwes Dekker"], a: 1 },
+        { q: "Tokoh perlawanan dari Maluku yang dikenal dengan gelar Kapitan Pattimura adalah...", o: ["Sultan Hasanuddin", "Thomas Matulessy", "Christina Martha Tiahahu", "Pangeran Antasari"], a: 1 },
+        { q: "Organisasi pergerakan nasional pertama di Indonesia yang berdiri 20 Mei 1908 adalah...", o: ["Sarekat Islam", "Budi Utomo", "Indische Partij", "PNI"], a: 1 },
+        { q: "Sumpah Pemuda dibacakan pada tanggal...", o: ["17 Agustus 1945", "28 Oktober 1928", "20 Mei 1908", "1 Juni 1945"], a: 1 },
+        { q: "Tokoh yang dikenal sebagai Bapak Pendidikan Nasional adalah...", o: ["Dr. Soetomo", "Ki Hajar Dewantara", "Ir. Soekarno", "Drs. Moh. Hatta"], a: 1 },
+        { q: "Jepang masuk ke Indonesia pada tahun 1942 setelah mengalahkan Belanda dalam perjanjian...", o: ["Kalijati", "Linggarjati", "Renville", "Roem-Royen"], a: 0 },
+        { q: "Kerja paksa pada masa pendudukan Jepang disebut...", o: ["Rodi", "Romusha", "Autarki", "Kinrohoshi"], a: 1 },
+        { q: "BPUPKI dibentuk oleh Jepang dengan tujuan untuk...", o: ["Membantu Jepang melawan sekutu", "Mempersiapkan kemerdekaan Indonesia", "Mengadili tokoh nasional", "Membagi wilayah Indonesia"], a: 1 },
+        { q: "Teks Proklamasi Kemerdekaan Indonesia diketik oleh...", o: ["Sayuti Melik", "Ahmad Soebardjo", "Sukarni", "BM Diah"], a: 0 },
+        { q: "Bendera Merah Putih yang dikibarkan saat proklamasi dijahit oleh...", o: ["Fatmawati", "Kartini", "Cut Nyak Dien", "Dewi Sartika"], a: 0 },
+        { q: "Makna dari peristiwa Rengasdengklok adalah...", o: ["Penyerahan Jepang kepada Sekutu", "Pengamanan Soekarno-Hatta agar tidak terpengaruh Jepang", "Perundingan damai dengan Belanda", "Pembentukan kabinet pertama"], a: 1 },
+        { q: "Proklamasi Kemerdekaan Indonesia dilaksanakan di...", o: ["Lapangan Ikada", "Jalan Pegangsaan Timur No. 56", "Rumah Laksamana Maeda", "Istana Merdeka"], a: 1 },
+        { q: "Pertempuran hebat di Surabaya pada 10 November 1945 dipimpin oleh tokoh muda bernama...", o: ["Bung Tomo", "Sudirman", "Gatot Subroto", "Slamet Riyadi"], a: 0 },
+        { q: "Belanda mengakui kedaulatan Indonesia (kecuali Irian Barat) melalui perjanjian...", o: ["Linggarjati", "Renville", "Konferensi Meja Bundar (KMB)", "Roem-Royen"], a: 2 },
+        { q: "Irian Barat akhirnya kembali ke pangkuan RI setelah dilakukan...", o: ["Agresi Militer", "Pepera (Penentuan Pendapat Rakyat)", "Perang Dunia", "Perjanjian Bongaya"], a: 1 },
+        { q: "Pahlawan nasional yang mendapat julukan \"Ayam Jantan dari Timur\" adalah...", o: ["Sultan Baabullah", "Sultan Hasanuddin", "Sultan Ageng Tirtayasa", "Sultan Iskandar Muda"], a: 1 },
+        { q: "Dasar negara Indonesia \"Pancasila\" pertama kali diusulkan oleh Ir. Soekarno pada tanggal...", o: ["1 Juni 1945", "17 Agustus 1945", "18 Agustus 1945", "22 Juni 1945"], a: 0 },
+        { q: "Presiden pertama Republik Indonesia adalah...", o: ["Moh. Hatta", "Soeharto", "Soekarno", "B.J. Habibie"], a: 2 },
+        { q: "Organisasi PBB yang menangani masalah pendidikan dan kebudayaan adalah...", o: ["WHO", "UNESCO", "UNICEF", "ILO"], a: 1 },
+        { q: "Perjuangan kemerdekaan Indonesia dilakukan melalui dua cara, yaitu...", o: ["Perang dan Gerilya", "Diplomasi dan Perjuangan Fisik", "Kerja sama dan Penyerahan diri", "Mengandalkan bantuan Jepang"], a: 1 }
+      ]
+    };
+
+    const QUIZ_DURATION = 45 * 60; // 45 Menit
+
+    // State Variables
+    let currentScreen = 'login';
+    let userData = { nama: '', kelas: '4', jk: 'L', token: '' };
+    let requiredToken = '';
+    let selectedMapel = '';
+    let quizQuestions = [];
+    let answers = {};
+    let currentQIndex = 0;
+    let timeLeft = QUIZ_DURATION;
+    let timerInterval = null;
+    let finalScore = 0;
+
+    // Inisialisasi: Generate Token Acak
+    function init() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let token = '';
+      for (let i = 0; i < 5; i++) {
+        token += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      requiredToken = token;
+      document.getElementById('display-token').innerText = requiredToken;
+      showScreen('login');
+    }
+
+    // Toggle Tampilan Antar Layar
+    function showScreen(screenId) {
+      document.getElementById('screen-login').classList.add('hidden');
+      document.getElementById('screen-dashboard').classList.add('hidden');
+      document.getElementById('screen-quiz').classList.add('hidden');
+      document.getElementById('screen-result').classList.add('hidden');
+      document.getElementById('screen-' + screenId).classList.remove('hidden');
+      
+      // Jika masuk ke quiz tapi layarnya dihilangkan oleh kelas utility flex, set flex
+      if (screenId === 'quiz') {
+        document.getElementById('screen-quiz').classList.add('flex');
+      } else {
+        document.getElementById('screen-quiz').classList.remove('flex');
+      }
+      
+      currentScreen = screenId;
+    }
+
+    // Tangani Submit Form Login
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const inputToken = document.getElementById('input-token').value.toUpperCase();
+      
+      if (inputToken !== requiredToken) {
+        document.getElementById('login-error').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('login-error').classList.add('hidden');
+      
+      userData.nama = document.getElementById('input-nama').value;
+      userData.kelas = document.getElementById('input-kelas').value;
+      userData.jk = document.getElementById('input-jk').value;
+      userData.token = inputToken;
+
+      // Update Info Dashboard
+      document.getElementById('dash-user-name').innerText = userData.nama;
+      document.getElementById('dash-user-info').innerText = `Kelas ${userData.kelas} | ${userData.jk === 'L' ? 'Laki-Laki' : 'Perempuan'} | SD Negeri Neglasari 02`;
+
+      showScreen('dashboard');
+    });
+
+    // Logout
+    function logout() {
+      // Reset Timer & Input
+      clearInterval(timerInterval);
+      document.getElementById('input-nama').value = '';
+      document.getElementById('input-token').value = '';
+      document.getElementById('login-error').classList.add('hidden');
+      init(); // Generate token baru
+    }
+
+    // Mulai Ujian
+    function startQuiz(mapel) {
+      selectedMapel = mapel;
+      
+      // Acak soal dan ambil 30
+      const shuffled = [...BANK_SOAL[mapel]].sort(() => 0.5 - Math.random());
+      quizQuestions = shuffled.slice(0, 30);
+      answers = {};
+      currentQIndex = 0;
+      timeLeft = QUIZ_DURATION;
+      
+      // Update UI Header
+      document.getElementById('quiz-title').innerText = `Ujian ${mapel === 'MTK' ? 'Matematika' : mapel}`;
+      document.getElementById('quiz-user-info').innerText = `${userData.nama} - Kelas ${userData.kelas}`;
+      
+      renderQuiz();
+      showScreen('quiz');
+      
+      // Mulai Timer
+      clearInterval(timerInterval);
+      updateTimerUI();
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerUI();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert("Waktu habis! Jawaban Anda akan diselesaikan otomatis.");
+          executeFinishQuiz();
+        }
+      }, 1000);
+    }
+
+    // Render Konten Ujian
+    function renderQuiz() {
+      const q = quizQuestions[currentQIndex];
+      
+      // Judul nomor soal
+      document.getElementById('question-number').innerText = `Soal Nomor ${currentQIndex + 1}`;
+      
+      // Teks soal
+      document.getElementById('question-text').innerText = q.q;
+      
+      // Pilihan ganda
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+      q.o.forEach((opt, idx) => {
+        const isSelected = answers[currentQIndex] === idx;
+        const letter = String.fromCharCode(65 + idx);
+        
+        const optDiv = document.createElement('div');
+        optDiv.onclick = () => selectAnswer(idx);
+        optDiv.className = `p-4 border-2 rounded-xl cursor-pointer flex items-center gap-4 transition ${isSelected ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`;
+        
+        optDiv.innerHTML = `
+          <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold ${isSelected ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}">${letter}</div>
+          <span class="text-gray-700 font-medium">${opt}</span>
+        `;
+        optionsContainer.appendChild(optDiv);
+      });
+
+      // Navigasi Bawah
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const btnFinish = document.getElementById('btn-finish');
+      
+      btnPrev.disabled = currentQIndex === 0;
+      
+      if (currentQIndex === quizQuestions.length - 1) {
+        btnNext.classList.add('hidden');
+        btnFinish.classList.remove('hidden');
+      } else {
+        btnNext.classList.remove('hidden');
+        btnFinish.classList.add('hidden');
+      }
+
+      // Sidebar Nomor Soal
+      renderSidebar();
+    }
+
+    // Render Sidebar
+    function renderSidebar() {
+      const sidebar = document.getElementById('nav-sidebar');
+      sidebar.innerHTML = '';
+      
+      quizQuestions.forEach((_, idx) => {
+        const isAnswered = answers[idx] !== undefined;
+        const isCurrent = currentQIndex === idx;
+        
+        const btn = document.createElement('button');
+        btn.onclick = () => {
+          currentQIndex = idx;
+          renderQuiz();
+        };
+        
+        let extraClasses = '';
+        if (isCurrent) {
+          extraClasses = 'border-blue-800 ring-2 ring-blue-300 ' + (isAnswered ? 'bg-blue-600 text-white' : 'bg-white text-gray-600');
+        } else if (isAnswered) {
+          extraClasses = 'bg-blue-600 text-white border-blue-600';
+        } else {
+          extraClasses = 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50';
+        }
+        
+        btn.className = `w-10 h-10 rounded-lg flex items-center justify-center font-medium border-2 transition ${extraClasses}`;
+        btn.innerText = idx + 1;
+        sidebar.appendChild(btn);
+      });
+    }
+
+    // Pilih Jawaban
+    function selectAnswer(optIndex) {
+      answers[currentQIndex] = optIndex;
+      renderQuiz();
+    }
+
+    // Ganti Soal dari tombol Bawah
+    function changeQuestion(step) {
+      const nextIndex = currentQIndex + step;
+      if (nextIndex >= 0 && nextIndex < quizQuestions.length) {
+        currentQIndex = nextIndex;
+        renderQuiz();
+      }
+    }
+
+    // Format & Update UI Timer
+    function updateTimerUI() {
+      const timerContainer = document.getElementById('timer-container');
+      const display = document.getElementById('timer-display');
+      
+      const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      const s = (timeLeft % 60).toString().padStart(2, '0');
+      display.innerText = `${m}:${s}`;
+
+      if (timeLeft < 300) {
+        timerContainer.classList.remove('bg-blue-800');
+        timerContainer.classList.add('bg-red-500', 'animate-pulse');
+      } else {
+        timerContainer.classList.remove('bg-red-500', 'animate-pulse');
+        timerContainer.classList.add('bg-blue-800');
+      }
+    }
+
+    // Modal Konfirmasi
+    function openConfirmModal() {
+      document.getElementById('confirm-modal').classList.remove('hidden');
+    }
+    function closeConfirmModal() {
+      document.getElementById('confirm-modal').classList.add('hidden');
+    }
+    function confirmFinishQuiz() {
+      closeConfirmModal();
+      executeFinishQuiz();
+    }
+
+    // Akhiri Ujian dan Hitung Skor
+    function executeFinishQuiz() {
+      clearInterval(timerInterval);
+      
+      let correct = 0;
+      quizQuestions.forEach((q, idx) => {
+        if (answers[idx] === q.a) correct++;
+      });
+      
+      finalScore = Math.round((correct / 30) * 100);
+      
+      document.getElementById('result-name').innerText = userData.nama;
+      document.getElementById('result-mapel').innerText = selectedMapel === 'MTK' ? 'Matematika' : selectedMapel;
+      
+      const scoreEl = document.getElementById('result-score');
+      scoreEl.innerText = finalScore;
+      if (finalScore >= 70) {
+        scoreEl.className = 'text-6xl font-black text-green-600';
+      } else {
+        scoreEl.className = 'text-6xl font-black text-orange-500';
+      }
+
+      showScreen('result');
+      syncToGoogleSheets(finalScore);
+    }
+
+    // Sinkronisasi ke Google Apps Script
+    async function syncToGoogleSheets(score) {
+      document.getElementById('sync-loading').classList.remove('hidden');
+      document.getElementById('sync-success').classList.add('hidden');
+      document.getElementById('sync-error').classList.add('hidden');
+
+      try {
+        const payload = {
+          nama: userData.nama,
+          kelas: userData.kelas,
+          jk: userData.jk,
+          mapel: selectedMapel,
+          nilai: score
+        };
+        
+        await fetch(GOOGLE_SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+          body: JSON.stringify(payload)
+        });
+        
+        document.getElementById('sync-loading').classList.add('hidden');
+        document.getElementById('sync-success').classList.remove('hidden');
+      } catch (error) {
+        console.error(error);
+        document.getElementById('sync-loading').classList.add('hidden');
+        document.getElementById('sync-error').classList.remove('hidden');
+      }
+    }
+
+    // Kembali ke Beranda
+    function goToDashboard() {
+      showScreen('dashboard');
+    }
+
+    // Jalankan inisialisasi awal saat halaman dimuat
+    window.onload = init;
+
+  </script>
+</body>
+</html>
